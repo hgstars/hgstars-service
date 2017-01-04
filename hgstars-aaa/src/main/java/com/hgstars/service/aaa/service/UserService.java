@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class UserService implements IAccountService {
+public class UserService {
     private static Logger logger = LoggerFactory.getLogger(UserService.class);
     public static final String HASH_ALGORITHM = "SHA-1";
     public static final int HASH_INTERATIONS = 1024;
@@ -37,11 +37,11 @@ public class UserService implements IAccountService {
         logger.info("userList{}", userList);
         return userList;
     }
-    @Cacheable(value = "system.config", key = "'system.config_'+#id")
-    public String test(int id) {
+    @Cacheable(value = "system.config", key = "'system.config_test'+#id")
+    public long test(int id) {
         logger.info("无缓存");
         long result = System.currentTimeMillis();
-        return "" +result;
+        return result;
     }
 
     public void register(User user) {

@@ -22,7 +22,7 @@ public class AccountService implements IAccountService{
     private UserService userService;
 
     @Override
-    public String test(int id) {
+    public long test(int id) {
         logger.info("test account service");
         return userService.test(id);
     }
