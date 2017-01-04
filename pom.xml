@@ -7,6 +7,10 @@
     <groupId>com.hgstars.service</groupId>
     <artifactId>hgstars-service</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
 
+    <modules>
+        <module>hgstars-aaa</module>
+    </modules>
 </project>
