@@ -13,7 +13,8 @@
 
 	<description>Spring公共配置 </description>
 
-
+	<util:properties id="wxProperties"
+					 location="classpath:/wx.properties" />
 	<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
 	<context:component-scan base-package="com.hgstars.service.aaa"/>
 
@@ -54,6 +55,34 @@
 
 	<!-- JSR303 Validator定义 -->
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+
+	<!-- 配置RestTemplate -->
+	<!--Http client Factory-->
+	<bean id="httpClientFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory">
+		<property name="connectTimeout"  value="3000"/>
+		<property name="readTimeout"  value="2000"/>
+	</bean>
+
+	<!--RestTemplate-->
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<constructor-arg ref="httpClientFactory"/>
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.FormHttpMessageConverter"/>
+				<!--<bean class="org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter"/>-->
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/plain;charset=UTF-8</value>
+							<value>application/json</value>
+							<value>text/html;charset=utf-8</value>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
 
 	<!-- production环境 -->
 	<beans profile="production">
@@ -115,6 +144,11 @@
 						<property name="redisTemplate" ref="redisTemplate" />
 						<property name="name" value="account" />
 						<property name="timeout" value="600" /><!-- 10分钟后过期 -->
+					</bean>
+					<bean class="com.hgstars.core.cache.redis.RedisCache">
+						<property name="redisTemplate" ref="redisTemplate" />
+						<property name="name" value="weixin" />
+						<property name="timeout" value="5400" /><!-- 一个半小时过期，（微信token 是两个小时过期） -->
 					</bean>
 				</set>
 			</property>
